@@ -32,10 +32,14 @@ fun UserSearchScreen() {
     val userList = List(12) { "ユーザー$it" }
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(text = "ユーザー検索")
-                // TODO 文字サイズとか考える
-            })
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "ユーザー検索",
+                        style = MaterialTheme.typography.h6
+                    )
+                }
+            )
         }
     ) {
         Column {
