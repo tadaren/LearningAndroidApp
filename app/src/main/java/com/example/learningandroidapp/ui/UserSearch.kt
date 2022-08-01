@@ -100,7 +100,10 @@ fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
 @Composable
 fun UserListItem(modifier: Modifier = Modifier, user: String) {
     Row(
-        modifier = modifier.padding(top = 8.dp, bottom = 8.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp)
+            .clickable { /*TODO*/ },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
