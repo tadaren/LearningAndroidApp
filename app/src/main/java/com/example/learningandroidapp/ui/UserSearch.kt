@@ -49,7 +49,13 @@ fun UserSearchScreen(viewModel: UserSearchViewModel = viewModel()) {
     ) {
         Column {
             SearchBox(onSearch = searchUser)
-            UserList(userList = uiState.userList)
+            if (uiState.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                UserList(userList = uiState.userList)
+            }
         }
     }
 }
@@ -115,7 +121,7 @@ fun EmptyUserListPreview() {
 
 @Composable
 fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
-    // TODO userList引数の型を再検討 + Loading表示
+    // TODO userList引数の型を再検討
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "検索結果なし", style = MaterialTheme.typography.subtitle1)
