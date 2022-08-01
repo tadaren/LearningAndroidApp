@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
+import com.example.learningandroidapp.viewmodel.UserSearchViewModel
 
 
 @Preview
@@ -28,8 +30,11 @@ fun UserSearchScreenPreview() {
 }
 
 @Composable
-fun UserSearchScreen() {
-    val userList = List(12) { "ユーザー$it" }
+fun UserSearchScreen(viewModel: UserSearchViewModel = viewModel()) {
+    val uiState = viewModel.uiState
+    val searchUser = { text: String ->
+        viewModel.searchUser(text)
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -43,16 +48,15 @@ fun UserSearchScreen() {
         }
     ) {
         Column {
-            SearchBox()
-            UserList(userList = userList)
+            SearchBox(onSearch = searchUser)
+            UserList(userList = uiState.userList)
         }
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBox(modifier: Modifier = Modifier) {
-    // TODO Stateの宣言位置を検討する
+fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
     var text by remember {
         mutableStateOf("")
     }
@@ -85,7 +89,7 @@ fun SearchBox(modifier: Modifier = Modifier) {
                 keyboardController?.hide()
             })
         )
-        Button(modifier = Modifier.padding(end = 16.dp), onClick = { /*TODO*/ }) {
+        Button(modifier = Modifier.padding(end = 16.dp), onClick = { onSearch(text) }) {
             Text(text = "検索")
         }
     }
