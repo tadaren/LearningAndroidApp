@@ -1,15 +1,19 @@
 package com.example.learningandroidapp.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
@@ -41,6 +45,7 @@ fun UserSearchScreen() {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBox(modifier: Modifier = Modifier) {
     // TODO Stateの宣言位置を検討する
@@ -50,6 +55,7 @@ fun SearchBox(modifier: Modifier = Modifier) {
     val isEmpty by remember {
         derivedStateOf { text.isEmpty() }
     }
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         OutlinedTextField(
             modifier = Modifier
@@ -69,7 +75,11 @@ fun SearchBox(modifier: Modifier = Modifier) {
                         )
                     }
                 }
-            }
+            },
+            keyboardActions = KeyboardActions(onDone = {
+                // キーボードを閉じる
+                keyboardController?.hide()
+            })
         )
         Button(modifier = Modifier.padding(end = 16.dp), onClick = { /*TODO*/ }) {
             Text(text = "検索")
