@@ -111,7 +111,7 @@ fun EmptyUserListPreview() {
 
 @Composable
 fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
-    // TODO userList引数の型を再検討
+    // TODO userList引数の型を再検討 + Loading表示
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "検索結果なし", style = MaterialTheme.typography.subtitle1)
