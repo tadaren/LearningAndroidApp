@@ -87,12 +87,36 @@ fun SearchBox(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview
+@Composable
+fun UserListPreview() {
+    val userList = List(12) { "ユーザー$it" }
+    LearningAndroidAppTheme {
+        UserList(userList = userList)
+    }
+}
+
+@Preview
+@Composable
+fun EmptyUserListPreview() {
+    val userList = List(0) { "ユーザー$it" }
+    LearningAndroidAppTheme {
+        UserList(userList = userList)
+    }
+}
+
 @Composable
 fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
     // TODO userList引数の型を再検討
-    LazyColumn {
-        items(items = userList) { user ->
-            UserListItem(user = user)
+    if (userList.isEmpty()) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = "検索結果なし", style = MaterialTheme.typography.subtitle1)
+        }
+    } else {
+        LazyColumn(modifier = modifier) {
+            items(items = userList) { user ->
+                UserListItem(user = user)
+            }
         }
     }
 }
