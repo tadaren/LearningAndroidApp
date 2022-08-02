@@ -134,8 +134,8 @@ fun UserListItem(modifier: Modifier = Modifier, user: String) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 8.dp)
-            .clickable { /*TODO*/ },
+            .clickable { /*TODO*/ }
+            .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
