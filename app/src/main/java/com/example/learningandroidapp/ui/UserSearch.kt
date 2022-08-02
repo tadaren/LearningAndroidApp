@@ -14,14 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.learningandroidapp.R
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 import com.example.learningandroidapp.viewmodel.UserSearchViewModel
 
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun UserSearchScreenPreview() {
     LearningAndroidAppTheme {
@@ -40,8 +42,7 @@ fun UserSearchScreen(viewModel: UserSearchViewModel = viewModel()) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "ユーザー検索",
-                        style = MaterialTheme.typography.h6
+                        text = stringResource(R.string.appbar_text)
                     )
                 }
             )
@@ -77,15 +78,14 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
                 .weight(1f),
             value = text,
             onValueChange = { text = it },
-            label = { Text(text = "ユーザー名") },
+            label = { Text(text = stringResource(R.string.searchbox_label)) },
             singleLine = true,
             trailingIcon = {
                 if (!isEmpty) {
                     IconButton(onClick = { text = "" }) {
                         Icon(
                             Icons.Filled.Cancel,
-                            contentDescription = "clear text",
-                            Modifier.size(20.dp)
+                            contentDescription = stringResource(R.string.searchbox_clear_button_text)
                         )
                     }
                 }
@@ -96,7 +96,7 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
             })
         )
         Button(modifier = Modifier.padding(end = 16.dp), onClick = { onSearch(text) }) {
-            Text(text = "検索")
+            Text(text = stringResource(R.string.searchbox_button_text))
         }
     }
 }
@@ -106,7 +106,9 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
 fun UserListPreview() {
     val userList = List(12) { "ユーザー$it" }
     LearningAndroidAppTheme {
-        UserList(userList = userList)
+        Surface {
+            UserList(userList = userList)
+        }
     }
 }
 
@@ -115,7 +117,9 @@ fun UserListPreview() {
 fun EmptyUserListPreview() {
     val userList = List(0) { "ユーザー$it" }
     LearningAndroidAppTheme {
-        UserList(userList = userList)
+        Surface {
+            UserList(userList = userList)
+        }
     }
 }
 
@@ -124,10 +128,13 @@ fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
     // TODO userList引数の型を再検討
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "検索結果なし", style = MaterialTheme.typography.subtitle1)
+            Text(
+                text = stringResource(R.string.userlist_empty_text),
+                style = MaterialTheme.typography.subtitle1
+            )
         }
     } else {
-        LazyColumn(modifier = modifier) {
+        LazyColumn() {
             items(items = userList) { user ->
                 UserListItem(user = user)
             }
@@ -140,8 +147,8 @@ fun UserListItem(modifier: Modifier = Modifier, user: String) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 8.dp)
-            .clickable { /*TODO*/ },
+            .clickable { /*TODO*/ }
+            .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
