@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.learningandroidapp.R
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
+import com.example.learningandroidapp.viewmodel.UserSearchUiState
 import com.example.learningandroidapp.viewmodel.UserSearchViewModel
 
 
@@ -50,13 +51,28 @@ fun UserSearchScreen(viewModel: UserSearchViewModel = viewModel()) {
     ) {
         Column {
             SearchBox(onSearch = searchUser)
-            if (uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                UserList(userList = uiState.userList)
-            }
+            UserSearchContent(uiState = uiState)
+        }
+    }
+}
+
+@Composable
+fun UserSearchContent(uiState: UserSearchUiState) {
+    if (uiState.isLoading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    } else {
+        UserList(userList = uiState.userList)
+    }
+}
+
+@Preview
+@Composable
+fun UserSearchContentLoadingPreview() {
+    LearningAndroidAppTheme {
+        Surface {
+            UserSearchContent(uiState = UserSearchUiState(isLoading = true))
         }
     }
 }
