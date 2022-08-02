@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun UserSearchScreenPreview() {
     LearningAndroidAppTheme {
@@ -96,7 +96,9 @@ fun SearchBox(modifier: Modifier = Modifier) {
 fun UserListPreview() {
     val userList = List(12) { "ユーザー$it" }
     LearningAndroidAppTheme {
-        UserList(userList = userList)
+        Surface {
+            UserList(userList = userList)
+        }
     }
 }
 
@@ -105,7 +107,9 @@ fun UserListPreview() {
 fun EmptyUserListPreview() {
     val userList = List(0) { "ユーザー$it" }
     LearningAndroidAppTheme {
-        UserList(userList = userList)
+        Surface {
+            UserList(userList = userList)
+        }
     }
 }
 
