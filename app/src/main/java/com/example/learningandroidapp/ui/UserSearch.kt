@@ -125,7 +125,7 @@ fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
             )
         }
     } else {
-        LazyColumn(modifier = modifier) {
+        LazyColumn() {
             items(items = userList) { user ->
                 UserListItem(user = user)
             }
