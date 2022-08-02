@@ -76,8 +76,7 @@ fun SearchBox(modifier: Modifier = Modifier) {
                     IconButton(onClick = { text = "" }) {
                         Icon(
                             Icons.Filled.Cancel,
-                            contentDescription = stringResource(R.string.searchbox_clear_button_text),
-                            Modifier.size(20.dp)
+                            contentDescription = stringResource(R.string.searchbox_clear_button_text)
                         )
                     }
                 }
