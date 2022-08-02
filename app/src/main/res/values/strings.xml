@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LearningAndroidApp</string>
+    <string name="searchbox_label">ユーザー名</string>
+    <string name="appbar_text">ユーザー検索</string>
+    <string name="searchbox_clear_button_text">clear text</string>
+    <string name="userlist_empty_text">検索結果なし</string>
+    <string name="searchbox_button_text">検索</string>
 </resources>
