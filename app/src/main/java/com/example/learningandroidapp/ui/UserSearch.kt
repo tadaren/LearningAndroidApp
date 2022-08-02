@@ -37,8 +37,7 @@ fun UserSearchScreen() {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.appbar_text),
-                        style = MaterialTheme.typography.h6
+                        text = stringResource(R.string.appbar_text)
                     )
                 }
             )
