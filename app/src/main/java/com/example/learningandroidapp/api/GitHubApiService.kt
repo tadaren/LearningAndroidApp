@@ -7,6 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 private val gson = GsonBuilder()
     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -29,7 +30,7 @@ interface GitHubApiService {
         "Accept: application/vnd.github+json"
     )
     @GET("search/users")
-    suspend fun getUsers(text: String): GetUsersResponse
+    suspend fun getUsers(@Query("q") query: String): GetUsersResponse
 
 }
 
