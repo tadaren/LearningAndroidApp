@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.learningandroidapp.R
+import com.example.learningandroidapp.models.User
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 import com.example.learningandroidapp.viewmodel.UserSearchUiState
 import com.example.learningandroidapp.viewmodel.UserSearchViewModel
@@ -120,7 +121,9 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
 @Preview
 @Composable
 fun UserListPreview() {
-    val userList = List(12) { "ユーザー$it" }
+    val userList = List(12) {
+        User(userName = "ユーザー$it", avatarUrl = "")
+    }
     LearningAndroidAppTheme {
         Surface {
             UserList(userList = userList)
@@ -131,7 +134,9 @@ fun UserListPreview() {
 @Preview
 @Composable
 fun EmptyUserListPreview() {
-    val userList = List(0) { "ユーザー$it" }
+    val userList = List(0) {
+        User(userName = "ユーザー$it", avatarUrl = "")
+    }
     LearningAndroidAppTheme {
         Surface {
             UserList(userList = userList)
@@ -140,7 +145,7 @@ fun EmptyUserListPreview() {
 }
 
 @Composable
-fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
+fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
     // TODO userList引数の型を再検討
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -159,7 +164,7 @@ fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
 }
 
 @Composable
-fun UserListItem(modifier: Modifier = Modifier, user: String) {
+fun UserListItem(modifier: Modifier = Modifier, user: User) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -176,6 +181,6 @@ fun UserListItem(modifier: Modifier = Modifier, user: String) {
         ) {
             Text(text = "TODO")
         }
-        Text(modifier = Modifier.padding(start = 16.dp), text = user)
+        Text(modifier = Modifier.padding(start = 16.dp), text = user.userName)
     }
 }
