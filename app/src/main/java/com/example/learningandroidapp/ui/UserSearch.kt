@@ -13,12 +13,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.learningandroidapp.R
 import com.example.learningandroidapp.models.User
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
@@ -187,15 +189,14 @@ fun UserListItem(modifier: Modifier = Modifier, user: User) {
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Surface(
+        AsyncImage(
+            model = user.avatarUrl,
+            contentDescription = "avatar",
             modifier = Modifier
                 .padding(start = 16.dp)
-                .size(56.dp),
-            color = MaterialTheme.colors.primary,
-            shape = CircleShape,
-        ) {
-            Text(text = "TODO")
-        }
+                .size(56.dp)
+                .clip(CircleShape)
+        )
         Text(modifier = Modifier.padding(start = 16.dp), text = user.userName)
     }
 }
