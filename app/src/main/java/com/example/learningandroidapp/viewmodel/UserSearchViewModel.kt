@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 data class UserSearchUiState(
     val userList: List<User> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val hasError: Boolean = false,
 )
 
 @HiltViewModel
@@ -27,8 +28,16 @@ class UserSearchViewModel @Inject constructor(
     fun searchUser(text: String) {
         uiState = uiState.copy(isLoading = true)
         viewModelScope.launch {
-            val userList = userRepository.getUserList(text)
-            uiState = uiState.copy(isLoading = false, userList = userList)
+            uiState = try {
+                val userList = userRepository.getUserList(text)
+                uiState.copy(isLoading = false, userList = userList)
+            } catch (e: Exception) {
+                uiState.copy(isLoading = false, hasError = true, userList = emptyList())
+            }
         }
+    }
+
+    fun errorMessageShown() {
+        uiState = uiState.copy(hasError = false)
     }
 }

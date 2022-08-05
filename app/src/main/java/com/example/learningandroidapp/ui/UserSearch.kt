@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,12 +35,27 @@ fun UserSearchScreenPreview() {
 }
 
 @Composable
-fun UserSearchScreen(viewModel: UserSearchViewModel = viewModel()) {
+fun UserSearchScreen(
+    viewModel: UserSearchViewModel = viewModel(),
+    scaffoldState: ScaffoldState = rememberScaffoldState()
+) {
     val uiState = viewModel.uiState
     val searchUser = { text: String ->
         viewModel.searchUser(text)
     }
+
+    if (uiState.hasError) {
+        val context = LocalContext.current
+        LaunchedEffect(scaffoldState.snackbarHostState) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = context.getString(R.string.network_error_message)
+            )
+            viewModel.errorMessageShown()
+        }
+    }
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 title = {
