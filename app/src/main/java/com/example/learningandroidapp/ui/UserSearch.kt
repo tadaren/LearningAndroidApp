@@ -146,7 +146,6 @@ fun EmptyUserListPreview() {
 
 @Composable
 fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
-    // TODO userList引数の型を再検討
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
