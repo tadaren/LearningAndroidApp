@@ -13,12 +13,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.learningandroidapp.R
+import com.example.learningandroidapp.models.User
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 import com.example.learningandroidapp.viewmodel.UserSearchUiState
 import com.example.learningandroidapp.viewmodel.UserSearchViewModel
@@ -33,12 +37,27 @@ fun UserSearchScreenPreview() {
 }
 
 @Composable
-fun UserSearchScreen(viewModel: UserSearchViewModel = viewModel()) {
+fun UserSearchScreen(
+    viewModel: UserSearchViewModel = viewModel(),
+    scaffoldState: ScaffoldState = rememberScaffoldState()
+) {
     val uiState = viewModel.uiState
     val searchUser = { text: String ->
         viewModel.searchUser(text)
     }
+
+    if (uiState.hasError) {
+        val context = LocalContext.current
+        LaunchedEffect(scaffoldState.snackbarHostState) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = context.getString(R.string.network_error_message)
+            )
+            viewModel.errorMessageShown()
+        }
+    }
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 title = {
@@ -120,7 +139,9 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
 @Preview
 @Composable
 fun UserListPreview() {
-    val userList = List(12) { "ユーザー$it" }
+    val userList = List(12) {
+        User(userName = "ユーザー$it", avatarUrl = "")
+    }
     LearningAndroidAppTheme {
         Surface {
             UserList(userList = userList)
@@ -131,7 +152,9 @@ fun UserListPreview() {
 @Preview
 @Composable
 fun EmptyUserListPreview() {
-    val userList = List(0) { "ユーザー$it" }
+    val userList = List(0) {
+        User(userName = "ユーザー$it", avatarUrl = "")
+    }
     LearningAndroidAppTheme {
         Surface {
             UserList(userList = userList)
@@ -140,8 +163,7 @@ fun EmptyUserListPreview() {
 }
 
 @Composable
-fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
-    // TODO userList引数の型を再検討
+fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -159,7 +181,7 @@ fun UserList(modifier: Modifier = Modifier, userList: List<String>) {
 }
 
 @Composable
-fun UserListItem(modifier: Modifier = Modifier, user: String) {
+fun UserListItem(modifier: Modifier = Modifier, user: User) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -167,15 +189,14 @@ fun UserListItem(modifier: Modifier = Modifier, user: String) {
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Surface(
+        AsyncImage(
+            model = user.avatarUrl,
+            contentDescription = "avatar",
             modifier = Modifier
                 .padding(start = 16.dp)
-                .size(56.dp),
-            color = MaterialTheme.colors.primary,
-            shape = CircleShape,
-        ) {
-            Text(text = "TODO")
-        }
-        Text(modifier = Modifier.padding(start = 16.dp), text = user)
+                .size(56.dp)
+                .clip(CircleShape)
+        )
+        Text(modifier = Modifier.padding(start = 16.dp), text = user.userName)
     }
 }

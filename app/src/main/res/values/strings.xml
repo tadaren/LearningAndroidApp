@@ -5,4 +5,5 @@
     <string name="searchbox_clear_button_text">clear text</string>
     <string name="userlist_empty_text">検索結果なし</string>
     <string name="searchbox_button_text">検索</string>
+    <string name="network_error_message">通信に失敗しました。再度お試しください。</string>
 </resources>
