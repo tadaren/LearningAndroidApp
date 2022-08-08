@@ -1,6 +1,5 @@
 package com.example.learningandroidapp.di
 
-import com.example.learningandroidapp.api.BASE_URL
 import com.example.learningandroidapp.api.GitHubApiService
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -12,6 +11,8 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+
+private const val BASE_URL = "https://api.github.com"
 
 @Module
 @InstallIn(SingletonComponent::class)

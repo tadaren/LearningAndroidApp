@@ -5,8 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-const val BASE_URL = "https://api.github.com"
-
 data class GetUsersResponse(
     val totalCount: Int,
     val incompleteResults: Boolean,
