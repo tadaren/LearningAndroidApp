@@ -19,25 +19,34 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 
 @Preview(showBackground = true)
 @Composable
 fun UserInfoPreview() {
+    val userDetail = UserDetail(
+        userName = "ユーザー名",
+        screenName = "スクリーンネーム",
+        avatarUrl = "",
+        followers = 0,
+        following = 0,
+        repos = emptyList()
+    )
     LearningAndroidAppTheme {
-        UserInfo()
+        UserInfo(userDetail)
     }
 }
 
 @Composable
-fun UserInfo() {
+fun UserInfo(userDetail: UserDetail) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
-                model = "https://avatars.githubusercontent.com/u/20397503?v=4",
+                model = userDetail.avatarUrl,
                 contentDescription = "avatar",
                 modifier = Modifier
                     .padding(16.dp)
@@ -45,8 +54,8 @@ fun UserInfo() {
                     .clip(CircleShape)
             )
             Column {
-                Text(text = "スクリーンネーム")
-                Text(text = "ユーザー名", style = MaterialTheme.typography.body2)
+                Text(text = userDetail.screenName)
+                Text(text = userDetail.userName, style = MaterialTheme.typography.body2)
             }
         }
         Row(
@@ -63,14 +72,14 @@ fun UserInfo() {
             )
             Text(buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append("15")
+                    append(userDetail.followers.toString())
                 }
                 append(" followers")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                     append("・")
                 }
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append("24")
+                    append(userDetail.following.toString())
                 }
                 append(" following")
             })
