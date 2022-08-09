@@ -1,11 +1,10 @@
 package com.example.learningandroidapp.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.outlined.StarOutline
@@ -82,6 +81,32 @@ fun UserInfo() {
 
 @Preview(showBackground = true)
 @Composable
+fun UserRepositoryCardListEmptyPreview() {
+    LearningAndroidAppTheme {
+        UserRepositoryCardList(repos = emptyList())
+    }
+}
+
+@Composable
+fun UserRepositoryCardList(repos: List<UserRepo>) {
+    if (repos.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = "リポジトリはありません")
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = repos) { repo ->
+                UserRepositoryCard(repo = repo)
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 fun UserRepositoryCardPreview() {
     val repo = UserRepo(name = "リポジトリ名", description = "description", language = "Kotlin", star = 0)
     LearningAndroidAppTheme {
@@ -93,7 +118,9 @@ fun UserRepositoryCardPreview() {
 fun UserRepositoryCard(repo: UserRepo) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(), elevation = 4.dp
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        elevation = 4.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = repo.name)
