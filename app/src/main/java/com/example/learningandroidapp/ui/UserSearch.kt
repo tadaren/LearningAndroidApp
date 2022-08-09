@@ -42,8 +42,11 @@ fun UserSearchScreen(
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
     val uiState = viewModel.uiState
-    val searchUser = { text: String ->
-        viewModel.searchUser(text)
+    val onUserNameChanged = { userName: String ->
+        viewModel.onUserNameChanged(userName)
+    }
+    val searchUser = {
+        viewModel.searchUser()
     }
 
     if (uiState.hasError) {
@@ -69,7 +72,11 @@ fun UserSearchScreen(
         }
     ) {
         Column {
-            SearchBox(onSearch = searchUser)
+            SearchBox(
+                userName = uiState.userName,
+                onTextChanged = onUserNameChanged,
+                onSearch = searchUser
+            )
             UserSearchContent(uiState = uiState)
         }
     }
@@ -98,26 +105,25 @@ fun UserSearchContentLoadingPreview() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
-    var text by remember {
-        mutableStateOf("")
-    }
-    val isEmpty by remember {
-        derivedStateOf { text.isEmpty() }
-    }
+fun SearchBox(
+    modifier: Modifier = Modifier,
+    userName: String,
+    onTextChanged: (String) -> Unit,
+    onSearch: () -> Unit
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         OutlinedTextField(
             modifier = Modifier
                 .padding(16.dp)
                 .weight(1f),
-            value = text,
-            onValueChange = { text = it },
+            value = userName,
+            onValueChange = onTextChanged,
             label = { Text(text = stringResource(R.string.searchbox_label)) },
             singleLine = true,
             trailingIcon = {
-                if (!isEmpty) {
-                    IconButton(onClick = { text = "" }) {
+                if (userName.isNotEmpty()) {
+                    IconButton(onClick = { onTextChanged("") }) {
                         Icon(
                             Icons.Filled.Cancel,
                             contentDescription = stringResource(R.string.searchbox_clear_button_text)
@@ -130,7 +136,7 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
                 keyboardController?.hide()
             })
         )
-        Button(modifier = Modifier.padding(end = 16.dp), onClick = { onSearch(text) }) {
+        Button(modifier = Modifier.padding(end = 16.dp), onClick = onSearch) {
             Text(text = stringResource(R.string.searchbox_button_text))
         }
     }
