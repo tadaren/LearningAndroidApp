@@ -19,7 +19,7 @@ class UserSearchViewModelSpec : DescribeSpec({
     val userRepository = mockk<UserRepository>()
     lateinit var viewModel: UserSearchViewModel
 
-    val userSearchResult = User(
+    val user = User(
         userName = "user",
         avatarUrl = "https://placehold.jp/240x240.png"
     )
@@ -28,12 +28,12 @@ class UserSearchViewModelSpec : DescribeSpec({
         viewModel = UserSearchViewModel(userRepository)
     }
 
-    describe("#onSearchTextChanged") {
+    describe("#onUserNameChanged") {
         val inputUserName = "user"
         context("input user") {
             viewModel.onUserNameChanged(inputUserName)
 
-            it("searchText should be user") {
+            it("userName should be user") {
                 viewModel.uiState.userName shouldBe inputUserName
             }
         }
@@ -44,7 +44,7 @@ class UserSearchViewModelSpec : DescribeSpec({
         context("response success") {
             coEvery {
                 userRepository.getUserList(inputUserName)
-            } returns listOf(userSearchResult)
+            } returns listOf(user)
 
             viewModel.onUserNameChanged(inputUserName)
             viewModel.searchUser()
@@ -53,12 +53,12 @@ class UserSearchViewModelSpec : DescribeSpec({
                 viewModel.uiState shouldBe UserSearchUiState(
                     isLoading = false,
                     userName = inputUserName,
-                    userList = listOf(userSearchResult),
+                    userList = listOf(user),
                     hasError = false
                 )
             }
 
-            it("verify searchUser") {
+            it("verify getUserList") {
                 coVerify(exactly = 1) { userRepository.getUserList(inputUserName) }
             }
         }
@@ -77,7 +77,7 @@ class UserSearchViewModelSpec : DescribeSpec({
                 )
             }
 
-            it("verify searchUser") {
+            it("verify getUserList") {
                 coVerify(exactly = 1) { userRepository.getUserList(inputUserName) }
             }
         }
