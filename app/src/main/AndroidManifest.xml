@@ -30,7 +30,7 @@
         <activity
             android:name=".UserDetailActivity"
             android:theme="@style/Theme.LearningAndroidApp"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 
 </manifest>
