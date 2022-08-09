@@ -23,6 +23,44 @@ import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 
+@Preview
+@Composable
+fun UserDetailScreenPreview() {
+    LearningAndroidAppTheme {
+        UserDetailScreen()
+    }
+}
+
+@Composable
+fun UserDetailScreen() {
+    val repos = listOf(
+        UserRepo(name = "リポジトリ1", description = "description1", language = "Kotlin", star = 1),
+        UserRepo(name = "リポジトリ2", description = "description2", language = "Java", star = 11),
+        UserRepo(name = "リポジトリ3", description = "description3", language = "Scala", star = 111)
+    )
+    val userDetail = UserDetail(
+        userName = "ユーザー名",
+        screenName = "スクリーンネーム",
+        avatarUrl = "",
+        followers = 0,
+        following = 0,
+        repos = repos
+    )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "ユーザーリポジトリ")
+                }
+            )
+        }) {
+        Column {
+            UserInfo(userDetail)
+            UserRepositoryCardList(repos = userDetail.repos)
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun UserInfoPreview() {
