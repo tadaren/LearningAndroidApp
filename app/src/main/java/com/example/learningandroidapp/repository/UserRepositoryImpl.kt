@@ -10,8 +10,8 @@ import javax.inject.Singleton
 class UserRepositoryImpl @Inject constructor(
     private val gitHubApi: GitHubApiService
 ) : UserRepository {
-    override suspend fun getUserList(text: String): List<User> {
-        val response = gitHubApi.getUsers(text)
+    override suspend fun getUserList(userName: String): List<User> {
+        val response = gitHubApi.getUsers(userName)
         val userList = response.items.map {
             User(
                 userName = it.login,
