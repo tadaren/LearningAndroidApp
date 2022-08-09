@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -19,6 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.learningandroidapp.R
 import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
@@ -50,7 +53,7 @@ fun UserDetailScreen(userName: String) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "ユーザーリポジトリ")
+                    Text(text = stringResource(R.string.user_detail_page_title))
                 }
             )
         }) {
@@ -112,14 +115,14 @@ fun UserInfo(userDetail: UserDetail) {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                     append(userDetail.followers.toString())
                 }
-                append(" followers")
+                append(stringResource(R.string.followers))
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append("・")
+                    append(stringResource(R.string.dot))
                 }
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                     append(userDetail.following.toString())
                 }
-                append(" following")
+                append(stringResource(R.string.following))
             })
         }
     }
@@ -138,7 +141,7 @@ fun UserRepositoryCardListEmptyPreview() {
 fun UserRepositoryCardList(repos: List<UserRepo>) {
     if (repos.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "リポジトリはありません")
+            Text(text = stringResource(R.string.empty_repository_message))
         }
     } else {
         LazyColumn(
@@ -179,7 +182,7 @@ fun UserRepositoryCard(repo: UserRepo) {
             ) {
                 Text(text = repo.language, modifier = Modifier.padding(end = 16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.StarOutline, contentDescription = "repository star")
+                    Icon(Icons.Outlined.StarOutline, contentDescription = null)
                     Text(text = repo.star.toString())
                 }
             }
