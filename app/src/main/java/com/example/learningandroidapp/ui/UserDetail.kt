@@ -27,19 +27,19 @@ import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 @Composable
 fun UserDetailScreenPreview() {
     LearningAndroidAppTheme {
-        UserDetailScreen()
+        UserDetailScreen("ユーザー名")
     }
 }
 
 @Composable
-fun UserDetailScreen() {
+fun UserDetailScreen(userName: String) {
     val repos = listOf(
         UserRepo(name = "リポジトリ1", description = "description1", language = "Kotlin", star = 1),
         UserRepo(name = "リポジトリ2", description = "description2", language = "Java", star = 11),
         UserRepo(name = "リポジトリ3", description = "description3", language = "Scala", star = 111)
     )
     val userDetail = UserDetail(
-        userName = "ユーザー名",
+        userName = userName,
         screenName = "スクリーンネーム",
         avatarUrl = "",
         followers = 0,

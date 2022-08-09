@@ -1,5 +1,6 @@
 package com.example.learningandroidapp.ui
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.learningandroidapp.R
+import com.example.learningandroidapp.UserDetailActivity
 import com.example.learningandroidapp.models.User
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 import com.example.learningandroidapp.viewmodel.UserSearchUiState
@@ -182,10 +184,15 @@ fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
 
 @Composable
 fun UserListItem(modifier: Modifier = Modifier, user: User) {
+    val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { /*TODO*/ }
+            .clickable {
+                val intent = Intent(context, UserDetailActivity::class.java)
+                intent.putExtra("userName", user.userName)
+                context.startActivity(intent)
+            }
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
