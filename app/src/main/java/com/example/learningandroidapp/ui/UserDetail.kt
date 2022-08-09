@@ -1,11 +1,13 @@
 package com.example.learningandroidapp.ui
 
+import android.app.Activity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
@@ -49,11 +51,19 @@ fun UserDetailScreen(userName: String) {
         following = 0,
         repos = repos
     )
+    val activity = (LocalContext.current as Activity)
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(text = stringResource(R.string.user_detail_page_title))
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        activity.finish()
+                    }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    }
                 }
             )
         }) {
