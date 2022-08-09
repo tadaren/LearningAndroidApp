@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -119,7 +120,9 @@ fun UserInfo(userDetail: UserDetail) {
             Icon(
                 Icons.Filled.SupervisedUserCircle,
                 contentDescription = null,
-                modifier = Modifier.padding(end = 4.dp)
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .alpha(0.8f)
             )
             Text(buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -155,7 +158,9 @@ fun UserRepositoryCardList(repos: List<UserRepo>) {
         }
     } else {
         LazyColumn(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = repos) { repo ->
@@ -192,7 +197,11 @@ fun UserRepositoryCard(repo: UserRepo) {
             ) {
                 Text(text = repo.language, modifier = Modifier.padding(end = 16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.StarOutline, contentDescription = null)
+                    Icon(
+                        Icons.Outlined.StarOutline,
+                        contentDescription = null,
+                        modifier = Modifier.alpha(0.8f)
+                    )
                     Text(text = repo.star.toString())
                 }
             }
