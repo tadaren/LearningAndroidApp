@@ -11,7 +11,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 
-class UserRepositoryImplSpec : DescribeSpec({
+class UserRepositorySpec : DescribeSpec({
 
     val githubApi = mockk<GitHubApiService>()
     lateinit var repository: UserRepository
