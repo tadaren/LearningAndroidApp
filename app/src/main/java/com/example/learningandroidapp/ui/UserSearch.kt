@@ -1,6 +1,5 @@
 package com.example.learningandroidapp.ui
 
-import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.learningandroidapp.R
-import com.example.learningandroidapp.UserDetailActivity
 import com.example.learningandroidapp.models.User
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 import com.example.learningandroidapp.viewmodel.UserSearchUiState
@@ -34,14 +32,15 @@ import com.example.learningandroidapp.viewmodel.UserSearchViewModel
 @Composable
 private fun UserSearchScreenPreview() {
     LearningAndroidAppTheme {
-        UserSearchScreen()
+        UserSearchScreen(onNavigate = {})
     }
 }
 
 @Composable
 fun UserSearchScreen(
     viewModel: UserSearchViewModel = viewModel(),
-    scaffoldState: ScaffoldState = rememberScaffoldState()
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    onNavigate: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
     val searchUser = { text: String ->
@@ -72,19 +71,19 @@ fun UserSearchScreen(
     ) {
         Column {
             SearchBox(onSearch = searchUser)
-            UserSearchContent(uiState = uiState)
+            UserSearchContent(uiState = uiState, onNavigate = onNavigate)
         }
     }
 }
 
 @Composable
-private fun UserSearchContent(uiState: UserSearchUiState) {
+private fun UserSearchContent(uiState: UserSearchUiState, onNavigate: (String) -> Unit) {
     if (uiState.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
-        UserList(userList = uiState.userList)
+        UserList(userList = uiState.userList, onNavigate = onNavigate)
     }
 }
 
@@ -93,7 +92,7 @@ private fun UserSearchContent(uiState: UserSearchUiState) {
 private fun UserSearchContentLoadingPreview() {
     LearningAndroidAppTheme {
         Surface {
-            UserSearchContent(uiState = UserSearchUiState(isLoading = true))
+            UserSearchContent(uiState = UserSearchUiState(isLoading = true), onNavigate = {})
         }
     }
 }
@@ -146,7 +145,7 @@ private fun UserListPreview() {
     }
     LearningAndroidAppTheme {
         Surface {
-            UserList(userList = userList)
+            UserList(userList = userList, onNavigate = {})
         }
     }
 }
@@ -159,13 +158,17 @@ private fun EmptyUserListPreview() {
     }
     LearningAndroidAppTheme {
         Surface {
-            UserList(userList = userList)
+            UserList(userList = userList, onNavigate = {})
         }
     }
 }
 
 @Composable
-private fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
+private fun UserList(
+    modifier: Modifier = Modifier,
+    userList: List<User>,
+    onNavigate: (String) -> Unit
+) {
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -176,23 +179,18 @@ private fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
     } else {
         LazyColumn() {
             items(items = userList) { user ->
-                UserListItem(user = user)
+                UserListItem(user = user, onClick = { onNavigate(user.userName) })
             }
         }
     }
 }
 
 @Composable
-private fun UserListItem(modifier: Modifier = Modifier, user: User) {
-    val context = LocalContext.current
+private fun UserListItem(modifier: Modifier = Modifier, user: User, onClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                val intent = Intent(context, UserDetailActivity::class.java)
-                intent.putExtra("userName", user.userName)
-                context.startActivity(intent)
-            }
+            .clickable(onClick = onClick)
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
