@@ -125,19 +125,22 @@ private fun UserInfo(userDetail: UserDetail) {
                 modifier = Modifier.padding(end = 4.dp),
                 tint = Color.Unspecified
             )
-            Text(buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(userDetail.followers.toString())
-                }
-                append(stringResource(R.string.followers))
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(stringResource(R.string.dot))
-                }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(userDetail.following.toString())
-                }
-                append(stringResource(R.string.following))
-            })
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(userDetail.followers.toString())
+                    }
+                    append(stringResource(R.string.followers))
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(stringResource(R.string.dot))
+                    }
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(userDetail.following.toString())
+                    }
+                    append(stringResource(R.string.following))
+                },
+                style = MaterialTheme.typography.body2
+            )
         }
     }
 
