@@ -9,9 +9,10 @@ import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 class UserDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val userName = intent?.extras?.getString("userName") ?: throw NullPointerException()
         setContent {
             LearningAndroidAppTheme {
-                UserDetailScreen(intent?.extras?.getString("userName").toString())
+                UserDetailScreen(userName)
             }
         }
     }
