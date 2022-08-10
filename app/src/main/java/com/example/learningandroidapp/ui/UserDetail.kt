@@ -186,7 +186,7 @@ fun UserRepositoryCard(repo: UserRepo) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        elevation = 4.dp
+        elevation = 3.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = repo.name)
