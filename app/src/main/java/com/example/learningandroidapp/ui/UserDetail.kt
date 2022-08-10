@@ -29,16 +29,22 @@ import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
 
+@Composable
+fun UserDetailScreen(userName: String) {
+    val activity = (LocalContext.current as Activity)
+    UserDetailContent(userName = userName, onClickNavigationIcon = { activity.finish() })
+}
+
 @Preview
 @Composable
-fun UserDetailScreenPreview() {
+fun UserDetailContentPreview() {
     LearningAndroidAppTheme {
-        UserDetailScreen("ユーザー名")
+        UserDetailContent("ユーザー名") {}
     }
 }
 
 @Composable
-fun UserDetailScreen(userName: String) {
+fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Unit) {
     val repos = listOf(
         UserRepo(name = "リポジトリ1", description = "description1", language = "Kotlin", star = 1),
         UserRepo(name = "リポジトリ2", description = "description2", language = "Java", star = 11),
@@ -52,7 +58,6 @@ fun UserDetailScreen(userName: String) {
         following = 0,
         repos = repos
     )
-    val activity = (LocalContext.current as Activity)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -60,9 +65,7 @@ fun UserDetailScreen(userName: String) {
                     Text(text = stringResource(R.string.user_detail_page_title))
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        activity.finish()
-                    }) {
+                    IconButton(onClick = onClickNavigationIcon) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
                 }
