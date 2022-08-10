@@ -8,14 +8,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.SupervisedUserCircle
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -121,11 +120,10 @@ fun UserInfo(userDetail: UserDetail) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Filled.SupervisedUserCircle,
+                painter = painterResource(id = R.drawable.ic_supervised_user_circle),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 4.dp)
-                    .alpha(0.8f)
+                modifier = Modifier.padding(end = 4.dp),
+                tint = Color.Unspecified
             )
             Text(buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -201,9 +199,9 @@ fun UserRepositoryCard(repo: UserRepo) {
                 Text(text = repo.language, modifier = Modifier.padding(end = 16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        Icons.Outlined.StarOutline,
+                        painter = painterResource(id = R.drawable.ic_star),
                         contentDescription = null,
-                        modifier = Modifier.alpha(0.8f)
+                        tint = Color.Unspecified
                     )
                     Text(text = repo.star.toString())
                 }
