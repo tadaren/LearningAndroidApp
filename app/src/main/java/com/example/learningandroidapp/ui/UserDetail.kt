@@ -36,14 +36,14 @@ fun UserDetailScreen(userName: String) {
 
 @Preview
 @Composable
-fun UserDetailContentPreview() {
+private fun UserDetailContentPreview() {
     LearningAndroidAppTheme {
         UserDetailContent("ユーザー名") {}
     }
 }
 
 @Composable
-fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Unit) {
+private fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Unit) {
     val repos = listOf(
         UserRepo(name = "リポジトリ1", description = "description1", language = "Kotlin", star = 1),
         UserRepo(name = "リポジトリ2", description = "description2", language = "Java", star = 11),
@@ -79,7 +79,7 @@ fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun UserInfoPreview() {
+private fun UserInfoPreview() {
     val userDetail = UserDetail(
         userName = "ユーザー名",
         screenName = "スクリーンネーム",
@@ -94,7 +94,7 @@ fun UserInfoPreview() {
 }
 
 @Composable
-fun UserInfo(userDetail: UserDetail) {
+private fun UserInfo(userDetail: UserDetail) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -145,14 +145,14 @@ fun UserInfo(userDetail: UserDetail) {
 
 @Preview(showBackground = true)
 @Composable
-fun UserRepositoryCardListEmptyPreview() {
+private fun UserRepositoryCardListEmptyPreview() {
     LearningAndroidAppTheme {
         UserRepositoryCardList(repos = emptyList())
     }
 }
 
 @Composable
-fun UserRepositoryCardList(repos: List<UserRepo>) {
+private fun UserRepositoryCardList(repos: List<UserRepo>) {
     if (repos.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = stringResource(R.string.empty_repository_message))
@@ -174,7 +174,7 @@ fun UserRepositoryCardList(repos: List<UserRepo>) {
 
 @Preview(showBackground = true)
 @Composable
-fun UserRepositoryCardPreview() {
+private fun UserRepositoryCardPreview() {
     val repo = UserRepo(name = "リポジトリ名", description = "description", language = "Kotlin", star = 0)
     LearningAndroidAppTheme {
         UserRepositoryCard(repo)
@@ -182,7 +182,7 @@ fun UserRepositoryCardPreview() {
 }
 
 @Composable
-fun UserRepositoryCard(repo: UserRepo) {
+private fun UserRepositoryCard(repo: UserRepo) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),

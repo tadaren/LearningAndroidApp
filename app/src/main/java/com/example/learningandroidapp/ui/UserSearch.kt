@@ -32,7 +32,7 @@ import com.example.learningandroidapp.viewmodel.UserSearchViewModel
 
 @Preview(showSystemUi = true)
 @Composable
-fun UserSearchScreenPreview() {
+private fun UserSearchScreenPreview() {
     LearningAndroidAppTheme {
         UserSearchScreen()
     }
@@ -78,7 +78,7 @@ fun UserSearchScreen(
 }
 
 @Composable
-fun UserSearchContent(uiState: UserSearchUiState) {
+private fun UserSearchContent(uiState: UserSearchUiState) {
     if (uiState.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
@@ -90,7 +90,7 @@ fun UserSearchContent(uiState: UserSearchUiState) {
 
 @Preview
 @Composable
-fun UserSearchContentLoadingPreview() {
+private fun UserSearchContentLoadingPreview() {
     LearningAndroidAppTheme {
         Surface {
             UserSearchContent(uiState = UserSearchUiState(isLoading = true))
@@ -100,7 +100,7 @@ fun UserSearchContentLoadingPreview() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
+private fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
     var text by remember {
         mutableStateOf("")
     }
@@ -140,7 +140,7 @@ fun SearchBox(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
 
 @Preview
 @Composable
-fun UserListPreview() {
+private fun UserListPreview() {
     val userList = List(12) {
         User(userName = "ユーザー$it", avatarUrl = "")
     }
@@ -153,7 +153,7 @@ fun UserListPreview() {
 
 @Preview
 @Composable
-fun EmptyUserListPreview() {
+private fun EmptyUserListPreview() {
     val userList = List(0) {
         User(userName = "ユーザー$it", avatarUrl = "")
     }
@@ -165,7 +165,7 @@ fun EmptyUserListPreview() {
 }
 
 @Composable
-fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
+private fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -183,7 +183,7 @@ fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
 }
 
 @Composable
-fun UserListItem(modifier: Modifier = Modifier, user: User) {
+private fun UserListItem(modifier: Modifier = Modifier, user: User) {
     val context = LocalContext.current
     Row(
         modifier = modifier
