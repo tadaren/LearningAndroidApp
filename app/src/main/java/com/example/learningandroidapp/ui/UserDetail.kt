@@ -162,7 +162,8 @@ fun UserRepositoryCardList(repos: List<UserRepo>) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             items(items = repos) { repo ->
                 UserRepositoryCard(repo = repo)
@@ -184,8 +185,7 @@ fun UserRepositoryCardPreview() {
 fun UserRepositoryCard(repo: UserRepo) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .fillMaxWidth(),
         elevation = 3.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
