@@ -27,36 +27,38 @@ import com.example.learningandroidapp.R
 import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
+import com.example.learningandroidapp.viewmodel.UserDetailUiState
+import com.example.learningandroidapp.viewmodel.UserDetailViewModel
 
 @Composable
-fun UserDetailScreen(userName: String) {
+fun UserDetailScreen(viewModel: UserDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     val activity = (LocalContext.current as Activity)
-    UserDetailContent(userName = userName, onClickNavigationIcon = { activity.finish() })
+    UserDetailContent(viewModel.uiState, onClickNavigationIcon = { activity.finish() })
 }
 
 @Preview
 @Composable
 private fun UserDetailContentPreview() {
+    val uiState = UserDetailUiState(
+        userRepos = emptyList(),
+        userDetail = UserDetail(
+            userName = "ユーザー名",
+            screenName = "スクリーンネーム",
+            avatarUrl = "",
+            following = 0,
+            followers = 0
+        )
+    )
     LearningAndroidAppTheme {
-        UserDetailContent("ユーザー名") {}
+        UserDetailContent(uiState = uiState, onClickNavigationIcon = {})
     }
 }
 
 @Composable
-private fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Unit) {
-    val repos = listOf(
-        UserRepo(name = "リポジトリ1", description = "description1", language = "Kotlin", star = 1),
-        UserRepo(name = "リポジトリ2", description = "description2", language = "Java", star = 11),
-        UserRepo(name = "リポジトリ3", description = "description3", language = "Scala", star = 111)
-    )
-    val userDetail = UserDetail(
-        userName = userName,
-        screenName = "スクリーンネーム",
-        avatarUrl = "",
-        followers = 0,
-        following = 0,
-        repos = repos
-    )
+private fun UserDetailContent(
+    uiState: UserDetailUiState,
+    onClickNavigationIcon: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,9 +72,17 @@ private fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Uni
                 }
             )
         }) {
-        Column {
-            UserInfo(userDetail)
-            UserRepositoryCardList(repos = userDetail.repos)
+        if (uiState.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            val repos = uiState.userRepos
+            val userDetail = uiState.userDetail ?: throw NullPointerException()
+            Column {
+                UserInfo(userDetail)
+                UserRepositoryCardList(repos = repos)
+            }
         }
     }
 }
