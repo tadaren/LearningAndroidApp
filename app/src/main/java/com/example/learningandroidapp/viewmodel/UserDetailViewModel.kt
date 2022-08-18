@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
+import com.example.learningandroidapp.repository.UserDetailRepository
+import com.example.learningandroidapp.repository.UserReposRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +21,10 @@ data class UserDetailUiState(
 )
 
 @HiltViewModel
-class UserDetailViewModel @Inject constructor() : ViewModel() {
+class UserDetailViewModel @Inject constructor(
+    private val userDetailRepository: UserDetailRepository,
+    private val userReposRepository: UserReposRepository
+) : ViewModel() {
     var uiState by mutableStateOf(UserDetailUiState())
         private set
 
@@ -27,17 +32,9 @@ class UserDetailViewModel @Inject constructor() : ViewModel() {
         uiState = uiState.copy(isLoading = true)
         viewModelScope.launch {
             try {
-                val userDetail = UserDetail(
-                    userName = userName,
-                    screenName = userName.uppercase(),
-                    avatarUrl = "",
-                    followers = 0,
-                    following = 0
-                )
+                val userDetail = userDetailRepository.getUserDetail(userName)
 
-                val repos = listOf(
-                    UserRepo(userName, "description", "Kotlin", 12)
-                )
+                val repos = userReposRepository.getUserRepos(userName)
 
                 uiState =
                     uiState.copy(
