@@ -10,6 +10,7 @@ import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.repository.UserDetailRepository
 import com.example.learningandroidapp.repository.UserReposRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,13 +33,17 @@ class UserDetailViewModel @Inject constructor(
         uiState = uiState.copy(isLoading = true)
         viewModelScope.launch {
             uiState = try {
-                val userDetail = userDetailRepository.getUserDetail(userName)
-                val repos = userReposRepository.getUserRepos(userName)
+                val userDetail = async {
+                    userDetailRepository.getUserDetail(userName)
+                }
+                val repos = async {
+                    userReposRepository.getUserRepos(userName)
+                }
 
                 uiState.copy(
                     isLoading = false,
-                    userRepos = repos,
-                    userDetail = userDetail
+                    userRepos = repos.await(),
+                    userDetail = userDetail.await()
                 )
             } catch (e: Exception) {
                 uiState.copy(isLoading = false, hasError = true)
