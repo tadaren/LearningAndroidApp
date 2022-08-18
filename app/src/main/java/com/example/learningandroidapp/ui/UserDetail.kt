@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,9 +32,26 @@ import com.example.learningandroidapp.viewmodel.UserDetailUiState
 import com.example.learningandroidapp.viewmodel.UserDetailViewModel
 
 @Composable
-fun UserDetailScreen(viewModel: UserDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun UserDetailScreen(
+    viewModel: UserDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    scaffoldState: ScaffoldState = rememberScaffoldState()
+) {
     val activity = (LocalContext.current as Activity)
-    UserDetailContent(viewModel.uiState, onClickNavigationIcon = { activity.finish() })
+    val hasError = @Composable {
+        val context = LocalContext.current
+        LaunchedEffect(scaffoldState.snackbarHostState) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = context.getString(R.string.network_error_message)
+            )
+            viewModel.errorMessageShown()
+        }
+    }
+    UserDetailContent(
+        viewModel.uiState,
+        scaffoldState,
+        onClickNavigationIcon = { activity.finish() },
+        hasError = hasError
+    )
 }
 
 @Preview
@@ -50,16 +68,27 @@ private fun UserDetailContentPreview() {
         )
     )
     LearningAndroidAppTheme {
-        UserDetailContent(uiState = uiState, onClickNavigationIcon = {})
+        UserDetailContent(
+            uiState = uiState,
+            onClickNavigationIcon = {},
+            hasError = {},
+            scaffoldState = rememberScaffoldState()
+        )
     }
 }
 
 @Composable
 private fun UserDetailContent(
     uiState: UserDetailUiState,
-    onClickNavigationIcon: () -> Unit
+    scaffoldState: ScaffoldState,
+    onClickNavigationIcon: () -> Unit,
+    hasError: @Composable () -> Unit
 ) {
+    if (uiState.hasError) {
+        hasError()
+    }
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 title = {
