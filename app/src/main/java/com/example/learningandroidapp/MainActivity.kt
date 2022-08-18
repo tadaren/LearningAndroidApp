@@ -1,5 +1,6 @@
 package com.example.learningandroidapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,7 +14,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LearningAndroidAppTheme {
-                UserSearchScreen()
+                UserSearchScreen(onNavigate = {
+                    val intent = Intent(this, UserDetailActivity::class.java)
+                    intent.putExtra("userName", it)
+                    this.startActivity(intent)
+                })
             }
         }
     }

@@ -27,6 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UserDetailActivity"
+            android:theme="@style/Theme.LearningAndroidApp"
+            android:exported="false" />
     </application>
 
 </manifest>

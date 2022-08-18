@@ -1,0 +1,214 @@
+package com.example.learningandroidapp.ui
+
+import android.app.Activity
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.learningandroidapp.R
+import com.example.learningandroidapp.models.UserDetail
+import com.example.learningandroidapp.models.UserRepo
+import com.example.learningandroidapp.ui.theme.LearningAndroidAppTheme
+
+@Composable
+fun UserDetailScreen(userName: String) {
+    val activity = (LocalContext.current as Activity)
+    UserDetailContent(userName = userName, onClickNavigationIcon = { activity.finish() })
+}
+
+@Preview
+@Composable
+private fun UserDetailContentPreview() {
+    LearningAndroidAppTheme {
+        UserDetailContent("ユーザー名") {}
+    }
+}
+
+@Composable
+private fun UserDetailContent(userName: String, onClickNavigationIcon: () -> Unit) {
+    val repos = listOf(
+        UserRepo(name = "リポジトリ1", description = "description1", language = "Kotlin", star = 1),
+        UserRepo(name = "リポジトリ2", description = "description2", language = "Java", star = 11),
+        UserRepo(name = "リポジトリ3", description = "description3", language = "Scala", star = 111)
+    )
+    val userDetail = UserDetail(
+        userName = userName,
+        screenName = "スクリーンネーム",
+        avatarUrl = "",
+        followers = 0,
+        following = 0,
+        repos = repos
+    )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.user_detail_page_title))
+                },
+                navigationIcon = {
+                    IconButton(onClick = onClickNavigationIcon) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                }
+            )
+        }) {
+        Column {
+            UserInfo(userDetail)
+            UserRepositoryCardList(repos = userDetail.repos)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserInfoPreview() {
+    val userDetail = UserDetail(
+        userName = "ユーザー名",
+        screenName = "スクリーンネーム",
+        avatarUrl = "",
+        followers = 0,
+        following = 0,
+        repos = emptyList()
+    )
+    LearningAndroidAppTheme {
+        UserInfo(userDetail)
+    }
+}
+
+@Composable
+private fun UserInfo(userDetail: UserDetail) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(
+                model = userDetail.avatarUrl,
+                contentDescription = "avatar",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(40.dp)
+                    .clip(CircleShape)
+            )
+            Column {
+                Text(text = userDetail.screenName)
+                Text(text = userDetail.userName, style = MaterialTheme.typography.body2)
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_supervised_user_circle),
+                contentDescription = null,
+                modifier = Modifier.padding(end = 4.dp),
+                tint = Color.Unspecified
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(userDetail.followers.toString())
+                    }
+                    append(stringResource(R.string.followers))
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(stringResource(R.string.dot))
+                    }
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(userDetail.following.toString())
+                    }
+                    append(stringResource(R.string.following))
+                },
+                style = MaterialTheme.typography.body2
+            )
+        }
+    }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserRepositoryCardListEmptyPreview() {
+    LearningAndroidAppTheme {
+        UserRepositoryCardList(repos = emptyList())
+    }
+}
+
+@Composable
+private fun UserRepositoryCardList(repos: List<UserRepo>) {
+    if (repos.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = stringResource(R.string.empty_repository_message))
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp)
+        ) {
+            items(items = repos) { repo ->
+                UserRepositoryCard(repo = repo)
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserRepositoryCardPreview() {
+    val repo = UserRepo(name = "リポジトリ名", description = "description", language = "Kotlin", star = 0)
+    LearningAndroidAppTheme {
+        UserRepositoryCard(repo)
+    }
+}
+
+@Composable
+private fun UserRepositoryCard(repo: UserRepo) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        elevation = 3.dp
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = repo.name)
+            Text(text = repo.description, style = MaterialTheme.typography.body2)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(text = repo.language, modifier = Modifier.padding(end = 16.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_star),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                    Text(text = repo.star.toString())
+                }
+            }
+        }
+    }
+}

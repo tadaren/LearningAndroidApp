@@ -9,7 +9,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -30,16 +31,17 @@ import com.example.learningandroidapp.viewmodel.UserSearchViewModel
 
 @Preview(showSystemUi = true)
 @Composable
-fun UserSearchScreenPreview() {
+private fun UserSearchScreenPreview() {
     LearningAndroidAppTheme {
-        UserSearchScreen()
+        UserSearchScreen(onNavigate = {})
     }
 }
 
 @Composable
 fun UserSearchScreen(
     viewModel: UserSearchViewModel = viewModel(),
-    scaffoldState: ScaffoldState = rememberScaffoldState()
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    onNavigate: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
     val onUserNameChanged = { userName: String ->
@@ -77,35 +79,35 @@ fun UserSearchScreen(
                 onTextChanged = onUserNameChanged,
                 onSearch = searchUser
             )
-            UserSearchContent(uiState = uiState)
+            UserSearchContent(uiState = uiState, onNavigate = onNavigate)
         }
     }
 }
 
 @Composable
-fun UserSearchContent(uiState: UserSearchUiState) {
+private fun UserSearchContent(uiState: UserSearchUiState, onNavigate: (String) -> Unit) {
     if (uiState.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
-        UserList(userList = uiState.userList)
+        UserList(userList = uiState.userList, onNavigate = onNavigate)
     }
 }
 
 @Preview
 @Composable
-fun UserSearchContentLoadingPreview() {
+private fun UserSearchContentLoadingPreview() {
     LearningAndroidAppTheme {
         Surface {
-            UserSearchContent(uiState = UserSearchUiState(isLoading = true))
+            UserSearchContent(uiState = UserSearchUiState(isLoading = true), onNavigate = {})
         }
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBox(
+private fun SearchBox(
     modifier: Modifier = Modifier,
     userName: String,
     onTextChanged: (String) -> Unit,
@@ -144,32 +146,36 @@ fun SearchBox(
 
 @Preview
 @Composable
-fun UserListPreview() {
+private fun UserListPreview() {
     val userList = List(12) {
         User(userName = "ユーザー$it", avatarUrl = "")
     }
     LearningAndroidAppTheme {
         Surface {
-            UserList(userList = userList)
+            UserList(userList = userList, onNavigate = {})
         }
     }
 }
 
 @Preview
 @Composable
-fun EmptyUserListPreview() {
+private fun EmptyUserListPreview() {
     val userList = List(0) {
         User(userName = "ユーザー$it", avatarUrl = "")
     }
     LearningAndroidAppTheme {
         Surface {
-            UserList(userList = userList)
+            UserList(userList = userList, onNavigate = {})
         }
     }
 }
 
 @Composable
-fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
+private fun UserList(
+    modifier: Modifier = Modifier,
+    userList: List<User>,
+    onNavigate: (String) -> Unit
+) {
     if (userList.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -180,18 +186,18 @@ fun UserList(modifier: Modifier = Modifier, userList: List<User>) {
     } else {
         LazyColumn() {
             items(items = userList) { user ->
-                UserListItem(user = user)
+                UserListItem(user = user, onClick = { onNavigate(user.userName) })
             }
         }
     }
 }
 
 @Composable
-fun UserListItem(modifier: Modifier = Modifier, user: User) {
+private fun UserListItem(modifier: Modifier = Modifier, user: User, onClick: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { /*TODO*/ }
+            .clickable(onClick = onClick)
             .padding(top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
