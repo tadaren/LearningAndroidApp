@@ -13,6 +13,7 @@ import javax.inject.Inject
 
 
 data class UserSearchUiState(
+    val userName: String = "",
     val userList: List<User> = emptyList(),
     val isLoading: Boolean = false,
     val hasError: Boolean = false,
@@ -25,11 +26,15 @@ class UserSearchViewModel @Inject constructor(
     var uiState by mutableStateOf(UserSearchUiState())
         private set
 
-    fun searchUser(text: String) {
+    fun onUserNameChanged(userName: String) {
+        uiState = uiState.copy(userName = userName)
+    }
+
+    fun searchUser() {
         uiState = uiState.copy(isLoading = true)
         viewModelScope.launch {
             uiState = try {
-                val userList = userRepository.getUserList(text)
+                val userList = userRepository.getUserList(uiState.userName)
                 uiState.copy(isLoading = false, userList = userList)
             } catch (e: Exception) {
                 uiState.copy(isLoading = false, hasError = true, userList = emptyList())
