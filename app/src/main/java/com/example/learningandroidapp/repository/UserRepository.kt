@@ -4,5 +4,5 @@ import com.example.learningandroidapp.models.User
 
 
 interface UserRepository {
-    suspend fun getUserList(text: String): List<User>
+    suspend fun getUserList(userName: String): List<User>
 }
