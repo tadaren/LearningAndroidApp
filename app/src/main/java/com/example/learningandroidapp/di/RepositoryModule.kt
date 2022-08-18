@@ -14,4 +14,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindUserDetailRepository(impl: UserDetailRepositoryImpl): UserDetailRepository
+
+    @Binds
+    abstract fun bindUserReposRepository(impl: UserReposRepositoryImpl): UserReposRepository
 }
