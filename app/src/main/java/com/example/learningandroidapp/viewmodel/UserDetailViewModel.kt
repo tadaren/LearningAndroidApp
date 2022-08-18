@@ -31,19 +31,17 @@ class UserDetailViewModel @Inject constructor(
     fun loadUserDetail(userName: String) {
         uiState = uiState.copy(isLoading = true)
         viewModelScope.launch {
-            try {
+            uiState = try {
                 val userDetail = userDetailRepository.getUserDetail(userName)
-
                 val repos = userReposRepository.getUserRepos(userName)
 
-                uiState =
-                    uiState.copy(
-                        isLoading = false,
-                        userRepos = repos,
-                        userDetail = userDetail
-                    )
+                uiState.copy(
+                    isLoading = false,
+                    userRepos = repos,
+                    userDetail = userDetail
+                )
             } catch (e: Exception) {
-                uiState = uiState.copy(isLoading = false, hasError = true)
+                uiState.copy(isLoading = false, hasError = true)
             }
         }
     }
