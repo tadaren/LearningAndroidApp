@@ -20,7 +20,7 @@ class UserDetailRepositoryImpl @Inject constructor(
             val userDetail = async { gitHubApi.getUserDetail(userName) }
             val userRepos = async { getUserRepos(userName) }
 
-            convertUserDetail(userDetail.await(), userRepos.await())
+            convertToUserDetail(userDetail.await(), userRepos.await())
         }
     }
 
@@ -39,7 +39,7 @@ class UserDetailRepositoryImpl @Inject constructor(
         return userRepos.slice(0 until min(50, userRepos.size))
     }
 
-    private fun convertUserDetail(
+    private fun convertToUserDetail(
         userDetailApiModel: UserDetailApiModel,
         userRepoApiModels: List<UserRepoApiModel>
     ): UserDetail {
