@@ -5,5 +5,6 @@ data class UserDetail(
     val screenName: String,
     val avatarUrl: String,
     val followers: Int,
-    val following: Int
+    val following: Int,
+    val repos: List<UserRepo> = emptyList()
 )

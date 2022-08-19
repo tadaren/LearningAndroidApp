@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
+import com.example.learningandroidapp.repository.UserDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,34 +20,26 @@ data class UserDetailUiState(
 )
 
 @HiltViewModel
-class UserDetailViewModel @Inject constructor() : ViewModel() {
+class UserDetailViewModel @Inject constructor(
+    private val userDetailRepository: UserDetailRepository
+) : ViewModel() {
     var uiState by mutableStateOf(UserDetailUiState())
         private set
 
     fun loadUserDetail(userName: String) {
         uiState = uiState.copy(isLoading = true)
         viewModelScope.launch {
-            try {
-                val userDetail = UserDetail(
-                    userName = userName,
-                    screenName = userName.uppercase(),
-                    avatarUrl = "",
-                    followers = 0,
-                    following = 0
-                )
+            uiState = try {
+                val userDetail = userDetailRepository.getUserDetail(userName)
+                val repos = userDetail.repos
 
-                val repos = listOf(
-                    UserRepo(userName, "description", "Kotlin", 12)
+                uiState.copy(
+                    isLoading = false,
+                    userRepos = repos,
+                    userDetail = userDetail
                 )
-
-                uiState =
-                    uiState.copy(
-                        isLoading = false,
-                        userRepos = repos,
-                        userDetail = userDetail
-                    )
             } catch (e: Exception) {
-                uiState = uiState.copy(isLoading = false, hasError = true)
+                uiState.copy(isLoading = false, hasError = true)
             }
         }
     }

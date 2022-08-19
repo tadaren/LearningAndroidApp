@@ -124,7 +124,8 @@ private fun UserInfoPreview() {
         screenName = "スクリーンネーム",
         avatarUrl = "",
         followers = 0,
-        following = 0
+        following = 0,
+        repos = emptyList()
     )
     LearningAndroidAppTheme {
         UserInfo(userDetail)
