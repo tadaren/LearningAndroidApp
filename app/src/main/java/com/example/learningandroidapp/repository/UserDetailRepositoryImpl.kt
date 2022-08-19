@@ -2,6 +2,7 @@ package com.example.learningandroidapp.repository
 
 import com.example.learningandroidapp.api.GitHubApiService
 import com.example.learningandroidapp.models.UserDetail
+import com.example.learningandroidapp.models.UserRepo
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,6 +18,12 @@ class UserDetailRepositoryImpl @Inject constructor(
             avatarUrl = "",
             followers = 2,
             following = 2
+        )
+    }
+
+    override suspend fun getUserRepos(userName: String): List<UserRepo> {
+        return listOf(
+            UserRepo(userName, "description", "Kotlin", 24)
         )
     }
 }

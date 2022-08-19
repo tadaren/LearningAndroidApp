@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.learningandroidapp.models.UserDetail
 import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.repository.UserDetailRepository
-import com.example.learningandroidapp.repository.UserReposRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -23,8 +22,7 @@ data class UserDetailUiState(
 
 @HiltViewModel
 class UserDetailViewModel @Inject constructor(
-    private val userDetailRepository: UserDetailRepository,
-    private val userReposRepository: UserReposRepository
+    private val userDetailRepository: UserDetailRepository
 ) : ViewModel() {
     var uiState by mutableStateOf(UserDetailUiState())
         private set
@@ -37,7 +35,7 @@ class UserDetailViewModel @Inject constructor(
                     userDetailRepository.getUserDetail(userName)
                 }
                 val repos = async {
-                    userReposRepository.getUserRepos(userName)
+                    userDetailRepository.getUserRepos(userName)
                 }
 
                 uiState.copy(
