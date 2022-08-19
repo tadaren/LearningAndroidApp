@@ -51,6 +51,7 @@ class UserDetailRepositoryImpl @Inject constructor(
                     description = it.description ?: "",
                     language = it.language ?: "",
                     star = it.stargazersCount,
+                    url = it.htmlUrl
                 )
             }
         return UserDetail(

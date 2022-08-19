@@ -6,4 +6,5 @@ data class UserRepoApiModel(
     val fork: Boolean,
     val language: String?,
     val stargazersCount: Int,
+    val htmlUrl: String,
 )
