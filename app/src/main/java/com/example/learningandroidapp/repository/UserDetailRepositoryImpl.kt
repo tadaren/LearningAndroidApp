@@ -9,6 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.min
 
 @Singleton
 class UserDetailRepositoryImpl @Inject constructor(
@@ -17,25 +18,41 @@ class UserDetailRepositoryImpl @Inject constructor(
     override suspend fun getUserDetail(userName: String): UserDetail {
         return coroutineScope {
             val userDetail = async { gitHubApi.getUserDetail(userName) }
-            val userRepos = async { gitHubApi.getUserRepos(userName) }
+            val userRepos = async { getUserRepos(userName) }
 
             convertUserDetail(userDetail.await(), userRepos.await())
         }
+    }
+
+    private suspend fun getUserRepos(userName: String): List<UserRepoApiModel> {
+        val userRepos = mutableListOf<UserRepoApiModel>()
+        var requestPageIndex = 1
+        while (userRepos.size < 50) {
+            val repos = gitHubApi.getUserRepos(userName, page = requestPageIndex)
+            requestPageIndex++
+            if (repos.isEmpty()) {
+                break
+            }
+            val filteredUserRepos = repos.filter { !it.fork }
+            userRepos.addAll(filteredUserRepos)
+        }
+        return userRepos.slice(0 until min(50, userRepos.size))
     }
 
     private fun convertUserDetail(
         userDetailApiModel: UserDetailApiModel,
         userRepoApiModels: List<UserRepoApiModel>
     ): UserDetail {
-        // TODO owner, forkのチェック
-        val repos = userRepoApiModels.map {
-            UserRepo(
-                name = it.name,
-                description = it.description ?: "",
-                language = it.language ?: "",
-                star = it.stargazersCount,
-            )
-        }
+        val repos = userRepoApiModels
+            .filter { !it.fork }
+            .map {
+                UserRepo(
+                    name = it.name,
+                    description = it.description ?: "",
+                    language = it.language ?: "",
+                    star = it.stargazersCount,
+                )
+            }
         return UserDetail(
             userName = userDetailApiModel.login,
             avatarUrl = userDetailApiModel.avatarUrl,

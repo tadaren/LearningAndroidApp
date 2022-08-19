@@ -19,7 +19,12 @@ interface GitHubApiService {
         "Accept: application/vnd.github+json"
     )
     @GET("users/{username}/repos")
-    suspend fun getUserRepos(@Path("username") userName: String): List<UserRepoApiModel>
+    suspend fun getUserRepos(
+        @Path("username") userName: String,
+        @Query("sort") sort: String = "pushed",
+        @Query("per_page") perPage: Int = 100,
+        @Query("page") page: Int = 1,
+    ): List<UserRepoApiModel>
 
     @Headers(
         "Authorization: token ${BuildConfig.GITHUB_TOKEN}",
