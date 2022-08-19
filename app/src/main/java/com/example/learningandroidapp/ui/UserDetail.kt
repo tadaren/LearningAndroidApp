@@ -101,16 +101,18 @@ private fun UserDetailContent(
                 }
             )
         }) {
-        if (uiState.isLoading || uiState.hasError) {
+        if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {
             val repos = uiState.userRepos
-            val userDetail = uiState.userDetail ?: throw NullPointerException()
-            Column {
-                UserInfo(userDetail)
-                UserRepositoryCardList(repos = repos)
+            val userDetail = uiState.userDetail
+            if (userDetail != null) {
+                Column {
+                    UserInfo(userDetail)
+                    UserRepositoryCardList(repos = repos)
+                }
             }
         }
     }
