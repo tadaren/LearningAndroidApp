@@ -101,7 +101,7 @@ private fun UserDetailContent(
                 }
             )
         }) {
-        if (uiState.isLoading) {
+        if (uiState.isLoading || uiState.hasError) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
