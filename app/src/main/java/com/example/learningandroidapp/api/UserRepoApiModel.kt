@@ -5,5 +5,5 @@ data class UserRepoApiModel(
     val description: String?,
     val forked: Boolean,
     val language: String?,
-    val stargazers_count: Int,
+    val stargazersCount: Int,
 )

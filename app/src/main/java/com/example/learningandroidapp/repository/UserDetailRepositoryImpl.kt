@@ -33,7 +33,7 @@ class UserDetailRepositoryImpl @Inject constructor(
                 name = it.name,
                 description = it.description ?: "",
                 language = it.language ?: "",
-                star = it.stargazers_count,
+                star = it.stargazersCount,
             )
         }
         return UserDetail(
