@@ -9,7 +9,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.min
 
 @Singleton
 class UserDetailRepositoryImpl @Inject constructor(
@@ -27,16 +26,15 @@ class UserDetailRepositoryImpl @Inject constructor(
     private suspend fun getUserRepos(userName: String): List<UserRepoApiModel> {
         val userRepos = mutableListOf<UserRepoApiModel>()
         var requestPageIndex = 1
-        while (userRepos.size < 50) {
+        while (true) {
             val repos = gitHubApi.getUserRepos(userName, page = requestPageIndex)
             requestPageIndex++
             if (repos.isEmpty()) {
                 break
             }
-            val filteredUserRepos = repos.filter { !it.fork }
-            userRepos.addAll(filteredUserRepos)
+            userRepos.addAll(repos)
         }
-        return userRepos.slice(0 until min(50, userRepos.size))
+        return userRepos
     }
 
     private fun convertToUserDetail(
@@ -44,14 +42,14 @@ class UserDetailRepositoryImpl @Inject constructor(
         userRepoApiModels: List<UserRepoApiModel>
     ): UserDetail {
         val repos = userRepoApiModels
-            .filter { !it.fork }
             .map {
                 UserRepo(
                     name = it.name,
                     description = it.description ?: "",
                     language = it.language ?: "",
                     star = it.stargazersCount,
-                    url = it.htmlUrl
+                    url = it.htmlUrl,
+                    isForked = it.fork
                 )
             }
         return UserDetail(

@@ -229,7 +229,8 @@ private fun UserRepositoryCardPreview() {
         description = "description",
         language = "Kotlin",
         star = 0,
-        url = ""
+        url = "",
+        isForked = false
     )
     LearningAndroidAppTheme {
         UserRepositoryCard(repo, onClick = {})
