@@ -1,6 +1,7 @@
 package com.example.learningandroidapp.ui
 
 import android.app.Activity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,7 +35,8 @@ import com.example.learningandroidapp.viewmodel.UserDetailViewModel
 @Composable
 fun UserDetailScreen(
     viewModel: UserDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    scaffoldState: ScaffoldState = rememberScaffoldState()
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    onNavigate: (String) -> Unit
 ) {
     val activity = (LocalContext.current as Activity)
     val hasError = @Composable {
@@ -50,7 +52,8 @@ fun UserDetailScreen(
         viewModel.uiState,
         scaffoldState,
         onClickNavigationIcon = { activity.finish() },
-        hasError = hasError
+        hasError = hasError,
+        onNavigate = onNavigate
     )
 }
 
@@ -58,13 +61,13 @@ fun UserDetailScreen(
 @Composable
 private fun UserDetailContentPreview() {
     val uiState = UserDetailUiState(
-        userRepos = emptyList(),
         userDetail = UserDetail(
             userName = "ユーザー名",
             screenName = "スクリーンネーム",
             avatarUrl = "",
             following = 0,
-            followers = 0
+            followers = 0,
+            repos = emptyList()
         )
     )
     LearningAndroidAppTheme {
@@ -72,7 +75,8 @@ private fun UserDetailContentPreview() {
             uiState = uiState,
             onClickNavigationIcon = {},
             hasError = {},
-            scaffoldState = rememberScaffoldState()
+            scaffoldState = rememberScaffoldState(),
+            onNavigate = {}
         )
     }
 }
@@ -82,7 +86,8 @@ private fun UserDetailContent(
     uiState: UserDetailUiState,
     scaffoldState: ScaffoldState,
     onClickNavigationIcon: () -> Unit,
-    hasError: @Composable () -> Unit
+    hasError: @Composable () -> Unit,
+    onNavigate: (String) -> Unit
 ) {
     if (uiState.hasError) {
         hasError()
@@ -106,11 +111,13 @@ private fun UserDetailContent(
                 CircularProgressIndicator()
             }
         } else {
-            val repos = uiState.userRepos
-            val userDetail = uiState.userDetail ?: throw NullPointerException()
-            Column {
-                UserInfo(userDetail)
-                UserRepositoryCardList(repos = repos)
+            val userDetail = uiState.userDetail
+            if (userDetail != null) {
+                val repos = userDetail.repos
+                Column {
+                    UserInfo(userDetail)
+                    UserRepositoryCardList(repos = repos, onNavigate = onNavigate)
+                }
             }
         }
     }
@@ -189,12 +196,12 @@ private fun UserInfo(userDetail: UserDetail) {
 @Composable
 private fun UserRepositoryCardListEmptyPreview() {
     LearningAndroidAppTheme {
-        UserRepositoryCardList(repos = emptyList())
+        UserRepositoryCardList(repos = emptyList(), onNavigate = {})
     }
 }
 
 @Composable
-private fun UserRepositoryCardList(repos: List<UserRepo>) {
+private fun UserRepositoryCardList(repos: List<UserRepo>, onNavigate: (String) -> Unit) {
     if (repos.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = stringResource(R.string.empty_repository_message))
@@ -208,7 +215,7 @@ private fun UserRepositoryCardList(repos: List<UserRepo>) {
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             items(items = repos) { repo ->
-                UserRepositoryCard(repo = repo)
+                UserRepositoryCard(repo = repo, onClick = { onNavigate(repo.url) })
             }
         }
     }
@@ -217,17 +224,25 @@ private fun UserRepositoryCardList(repos: List<UserRepo>) {
 @Preview(showBackground = true)
 @Composable
 private fun UserRepositoryCardPreview() {
-    val repo = UserRepo(name = "リポジトリ名", description = "description", language = "Kotlin", star = 0)
+    val repo = UserRepo(
+        name = "リポジトリ名",
+        description = "description",
+        language = "Kotlin",
+        star = 0,
+        url = "",
+        isForked = false
+    )
     LearningAndroidAppTheme {
-        UserRepositoryCard(repo)
+        UserRepositoryCard(repo, onClick = {})
     }
 }
 
 @Composable
-private fun UserRepositoryCard(repo: UserRepo) {
+private fun UserRepositoryCard(repo: UserRepo, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
         elevation = 3.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

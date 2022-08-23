@@ -5,4 +5,6 @@ data class UserRepo(
     val description: String,
     val language: String,
     val star: Int,
+    val url: String,
+    val isForked: Boolean,
 )
