@@ -22,7 +22,7 @@ interface GitHubApiService {
     suspend fun getUserRepos(
         @Path("username") userName: String,
         @Query("sort") sort: String = "pushed",
-        @Query("per_page") perPage: Int = 100,
+        @Query("per_page") perPage: Int = 50,
         @Query("page") page: Int = 1,
     ): List<UserRepoApiModel>
 
