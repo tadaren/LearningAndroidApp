@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.learningandroidapp.models.UserDetail
-import com.example.learningandroidapp.models.UserRepo
 import com.example.learningandroidapp.repository.UserDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +13,6 @@ import javax.inject.Inject
 
 data class UserDetailUiState(
     val userDetail: UserDetail? = null,
-    val userRepos: List<UserRepo> = emptyList(),
     val isLoading: Boolean = false,
     val hasError: Boolean = false,
 )
@@ -35,8 +33,7 @@ class UserDetailViewModel @Inject constructor(
 
                 uiState.copy(
                     isLoading = false,
-                    userRepos = repos,
-                    userDetail = userDetail
+                    userDetail = userDetail.copy(repos = repos)
                 )
             } catch (e: Exception) {
                 uiState.copy(isLoading = false, hasError = true)

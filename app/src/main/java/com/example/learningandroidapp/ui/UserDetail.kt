@@ -61,13 +61,13 @@ fun UserDetailScreen(
 @Composable
 private fun UserDetailContentPreview() {
     val uiState = UserDetailUiState(
-        userRepos = emptyList(),
         userDetail = UserDetail(
             userName = "ユーザー名",
             screenName = "スクリーンネーム",
             avatarUrl = "",
             following = 0,
-            followers = 0
+            followers = 0,
+            repos = emptyList()
         )
     )
     LearningAndroidAppTheme {
@@ -111,9 +111,9 @@ private fun UserDetailContent(
                 CircularProgressIndicator()
             }
         } else {
-            val repos = uiState.userRepos
             val userDetail = uiState.userDetail
             if (userDetail != null) {
+                val repos = userDetail.repos
                 Column {
                     UserInfo(userDetail)
                     UserRepositoryCardList(repos = repos, onNavigate = onNavigate)
