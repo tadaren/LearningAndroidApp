@@ -31,7 +31,7 @@ class UserDetailViewModel @Inject constructor(
         viewModelScope.launch {
             uiState = try {
                 val userDetail = userDetailRepository.getUserDetail(userName)
-                val repos = userDetail.repos.filter { !it.isForked }.take(50)
+                val repos = userDetail.repos.filter { !it.isForked }
 
                 uiState.copy(
                     isLoading = false,

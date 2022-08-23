@@ -17,24 +17,10 @@ class UserDetailRepositoryImpl @Inject constructor(
     override suspend fun getUserDetail(userName: String): UserDetail {
         return coroutineScope {
             val userDetail = async { gitHubApi.getUserDetail(userName) }
-            val userRepos = async { getUserRepos(userName) }
+            val userRepos = async { gitHubApi.getUserRepos(userName, perPage = 50) }
 
             convertToUserDetail(userDetail.await(), userRepos.await())
         }
-    }
-
-    private suspend fun getUserRepos(userName: String): List<UserRepoApiModel> {
-        val userRepos = mutableListOf<UserRepoApiModel>()
-        var requestPageIndex = 1
-        while (true) {
-            val repos = gitHubApi.getUserRepos(userName, page = requestPageIndex)
-            requestPageIndex++
-            if (repos.isEmpty()) {
-                break
-            }
-            userRepos.addAll(repos)
-        }
-        return userRepos
     }
 
     private fun convertToUserDetail(
