@@ -70,7 +70,7 @@ class UserSearchViewModelSpec : DescribeSpec({
             viewModel.onUserNameChanged(inputUserName)
             viewModel.searchUser()
 
-            it("event should be FetchError") {
+            it("uiState.hasError should be true") {
                 viewModel.uiState shouldBe UserSearchUiState(
                     userName = inputUserName,
                     hasError = true

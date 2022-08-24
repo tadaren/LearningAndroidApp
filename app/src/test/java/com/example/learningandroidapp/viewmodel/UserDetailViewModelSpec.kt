@@ -95,7 +95,7 @@ class UserDetailViewModelSpec : DescribeSpec({
 
             viewModel.loadUserDetail(inputUserName)
 
-            it("event should be FetchError") {
+            it("uiState.hasError should be true") {
                 viewModel.uiState shouldBe UserDetailUiState(
                     userDetail = null,
                     hasError = true,
