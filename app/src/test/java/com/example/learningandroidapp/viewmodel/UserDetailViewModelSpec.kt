@@ -45,7 +45,6 @@ class UserDetailViewModelSpec : DescribeSpec({
             isForked = false
         ),
     )
-    val filteredUserRepos = userRepos.filter { !it.isForked }
     val userDetail = UserDetail(
         userName = "user",
         screenName = "User",
@@ -54,6 +53,7 @@ class UserDetailViewModelSpec : DescribeSpec({
         following = 16,
         repos = userRepos
     )
+    val filteredUserRepos = userRepos.filter { !it.isForked }
 
     beforeSpec {
         viewModel = UserDetailViewModel(userDetailRepository)
@@ -70,8 +70,14 @@ class UserDetailViewModelSpec : DescribeSpec({
 
             it("userDetail should be collect value") {
                 viewModel.uiState shouldBe UserDetailUiState(
-                    userDetail = userDetail,
-                    userRepos = filteredUserRepos,
+                    userDetail = UserDetail(
+                        userName = "user",
+                        screenName = "User",
+                        avatarUrl = "https://placehold.jp/240x240.png",
+                        followers = 8,
+                        following = 16,
+                        repos = filteredUserRepos
+                    ),
                     hasError = false,
                     isLoading = false,
                 )
@@ -92,7 +98,6 @@ class UserDetailViewModelSpec : DescribeSpec({
             it("event should be FetchError") {
                 viewModel.uiState shouldBe UserDetailUiState(
                     userDetail = null,
-                    userRepos = listOf(),
                     hasError = true,
                     isLoading = false
                 )
